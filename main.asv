@@ -11,10 +11,8 @@ z = 10e3;
 
 T = -49.90 + 273.15;    % Temperature [K]
 rho_inf = 0.4135;       % Density @10km[kg/m^3]
-gamma = 1.4;
-R = 8.31432e3/29;
 
-c = sqrt(gamma*R*T);
+c = sqrt(
 % Angles of attack definition
 
 AoA1 = 10;   % First angle of attack [deg]
@@ -37,21 +35,15 @@ end
 
 % Define velocity direction and magnitude
 Vinf_dir = [0,-cos(AoA1),sin(AoA1)];
-v_inf = c*Mach;
+v_inf = c*M;
 
 % Dynamic pressure
 q = 0.5*rho_inf*v_inf^2;
 
 dF = ones(length(area),3);
-theta = ones(length(area),1);
 for i = 1:length(area)
-    theta(i) = pi/2 - acos(dot(-Vinf_dir,F(i,:)));
-    if dot(-Vinf_dir,F(i,:))<=0
-        Cp=0;
-    else
-        Cp = 2*(sin(theta(i)));
-    end
-    
+    theta = pi/2 - acos(dot(-Vinf_dir,F(i,:)));
+    Cp = 2*(sin(theta));
     dF(i,:) = -Cp*q*area(i)*F(i,:);     % Not sure about the (-) sign
 end
 
